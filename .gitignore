@@ -1,0 +1,4 @@
+.vscode/
+*.exe
+*.out
+cses_template.cpp
