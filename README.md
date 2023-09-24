@@ -13,9 +13,9 @@ The CSES Problem Set is a collection of competitive programming problems and exe
 | CSES ID | Problem Name                                       | Solution                                                  |
 | ------- | -------------------------------------------------- | --------------------------------------------------------- |
 | 1068 | [Weird Algorithm](https://cses.fi/problemset/task/1068) | [cpp](./01_Introductory_Problems/1068-weird-algorithm.cpp) |
-| 1094 | [Missing Number](https://cses.fi/problemset/task/1094) | [cpp](./01_Introductory_Problems/1094-missing-number.cpp) |
+| 1083 | [Missing Number](https://cses.fi/problemset/task/1083) | [cpp](./01_Introductory_Problems/1083-missing-number.cpp) |
 | 1069 | [Repetitions](https://cses.fi/problemset/task/1069) | [cpp](./01_Introductory_Problems/1069-repetitions.cpp) |
-| 1163 | [Increasing Array](https://cses.fi/problemset/task/1163) | [cpp](./01_Introductory_Problems/1163-increasing-array.cpp) |
+| 1094 | [Increasing Array](https://cses.fi/problemset/task/1094) | [cpp](./01_Introductory_Problems/1094-increasing-array.cpp) |
 | 1070 | [Permutations](https://cses.fi/problemset/task/1070) | [cpp](./01_Introductory_Problems/1070-permutations.cpp) |
 | 1071 | [Number Spiral](https://cses.fi/problemset/task/1071) | [cpp](./01_Introductory_Problems/1071-number-spiral.cpp) |
 | 1072 | [Two Knights](https://cses.fi/problemset/task/1072)  | [cpp](./01_Introductory_Problems/1072-two-knights.cpp) |
