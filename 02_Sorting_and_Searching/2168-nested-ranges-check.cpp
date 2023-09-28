@@ -20,10 +20,6 @@ struct Range {
     int l, r, idx;
 };
 
-bool compareByL(const Range &a, const Range &b) {
-    return (a.l < b.l || (a.l == b.l && a.r > b.r));
-}
-
 void printArray(const vector<bool> &arr) {
     for (bool val : arr) {
         cout << val << ' ';
@@ -41,7 +37,9 @@ void solve() {
         ranges[i].idx = i + 1;
     }
 
-    sort(ranges.begin(), ranges.end(), compareByL);
+    sort(ranges.begin(), ranges.end(), [](const Range& a, const Range& b) {
+        return (a.l == b.l ? a.r > b.r : a.l < b.l);
+    });
 
     vector<bool> left(n, false);
     int min_r = INT_MAX;
@@ -53,8 +51,6 @@ void solve() {
     }
 
     printArray(left);
-
-    sort(ranges.begin(), ranges.end(), compareByL);
 
     vector<bool> right(n, false);
     int max_r = 0;
