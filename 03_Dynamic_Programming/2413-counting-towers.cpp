@@ -20,12 +20,12 @@ const long long LLINF = LLONG_MAX;
 const int INF = INT_MAX;
 const int MOD = 1e9 + 7;
 
-const int MAX_N = 1e6 + 1;
-vector<vi> dp(MAX_N, vi(2));
+const int N = 1e6 + 1;
+vector<vi> dp(N, vi(2));
 
 void precompute() {
     dp[1] = {1, 1};
-    for (int i = 2; i < MAX_N; ++i) {
+    for (int i = 2; i < N; ++i) {
         dp[i][0] = (4LL * dp[i - 1][0] + dp[i - 1][1]) % MOD;
         dp[i][1] = (2LL * dp[i - 1][1] + dp[i - 1][0]) % MOD;
     }
