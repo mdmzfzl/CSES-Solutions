@@ -112,7 +112,6 @@ void solve() {
     }
 }
 
-
 int main() {
     fastio
 
