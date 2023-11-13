@@ -23,7 +23,7 @@ const int MOD = 1e9 + 7;
 const int N = 1e6 + 1;
 vector<vi> dp(N, vi(2));
 
-void precompute() {
+void preprocess() {
     dp[1] = {1, 1};
     for (int i = 2; i < N; ++i) {
         dp[i][0] = (4LL * dp[i - 1][0] + dp[i - 1][1]) % MOD;
@@ -41,11 +41,10 @@ void solve() {
 int main() {
     fastio
 
-    precompute();
-
     int tc = 1; // Number of test cases
     cin >> tc;
 
+    preprocess();
     while (tc--) {
         solve();
     }
