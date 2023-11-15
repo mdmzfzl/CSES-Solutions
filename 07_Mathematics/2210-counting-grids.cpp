@@ -20,14 +20,6 @@ const long long LLINF = LLONG_MAX;
 const int INF = INT_MAX;
 const int MOD = 1e9 + 7;
 
-ll add(ll a, ll b) {
-    return (a + b) % MOD;
-}
-
-ll mul(ll a, ll b) {
-    return (a * b) % MOD;
-}
-
 ll power(ll a, ll b) {
     ll ret = 1;
     while (b > 0) {
@@ -43,6 +35,10 @@ ll inverse(ll a) {
     return power(a, MOD - 2);
 }
 
+ll add(ll a, ll b) {
+    return (a + b) % MOD;
+}
+
 void solve() {
     ll n;
     cin >> n;
@@ -53,7 +49,7 @@ void solve() {
     ll deg270 = power(2, (n % 2) ? (n * n - 1) / 4 + 1 : n * n / 4);
     
     ll result = add(deg0, add(deg90, add(deg180, deg270)));
-    result = mul(result, inverse(4));
+    result = (result * inverse(4)) % MOD;
 
     cout << result << '\n';
 }
