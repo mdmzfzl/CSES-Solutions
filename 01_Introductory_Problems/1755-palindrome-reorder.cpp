@@ -17,12 +17,12 @@ const int INF = 1e9;
 const ll LLINF = 1e18;
 
 void solve() {
-    const int ALPHABET_SIZE = 26;
+    const int MAX_C = 26;
 
     string input;
     cin >> input;
 
-    vector<int> charCount(ALPHABET_SIZE, 0);
+    vector<int> charCount(MAX_C, 0);
 
     for (char c : input) {
         charCount[c - 'A']++;
@@ -30,7 +30,7 @@ void solve() {
 
     int oddChar = -1;
 
-    for (int i = 0; i < ALPHABET_SIZE; i++) {
+    for (int i = 0; i < MAX_C; i++) {
         if (charCount[i] % 2) {
             if (oddChar != -1) {
                 cout << "NO SOLUTION\n";
@@ -44,7 +44,7 @@ void solve() {
 
     string firstHalf;
 
-    for (int i = 0; i < ALPHABET_SIZE; i++) {
+    for (int i = 0; i < MAX_C; i++) {
         firstHalf += string(charCount[i] / 2, 'A' + i);
     }
 
