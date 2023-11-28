@@ -1,62 +1,118 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
-const int ALPHABET_SIZE = 26;
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+
+#define ll long long
+#define vi vector<int>
+#define vl vector<long long>
+#define pii pair<int, int>
+#define pll pair<ll, ll>
+#define umap unordered_map
+#define uset unordered_set
+
+#define rall(x) (x).rbegin(), (x).rend()
+#define all(x) (x).begin(), (x).end()
+#define pb push_back
+#define mp make_pair
+
+const long long LLINF = LLONG_MAX;
+const int INF = INT_MAX;
+const int MOD = 1e9 + 7;
+
+const int MAX_N = 1e5 + 5;
 
 struct TrieNode {
-    struct TrieNode *children[ALPHABET_SIZE];
-    bool isEndOfWord;
+    int len, link;
+    map<char, int> next;
 };
 
-struct TrieNode *getNode(void) {
-    struct TrieNode *pNode = new TrieNode;
-    pNode->isEndOfWord = false;
-    for (int i = 0; i < ALPHABET_SIZE; i++)
-        pNode->children[i] = NULL;
-    return pNode;
-}
+class AhoCorasick {
+private:
+    vector<TrieNode> nodes;
+    int size, last;
 
-void insert(struct TrieNode *root, string key) {
-    struct TrieNode *pCrawl = root;
-    for (int i = 0; i < key.length(); i++) {
-        int index = key[i] - 'a';
-        if (!pCrawl->children[index])
-            pCrawl->children[index] = getNode();
-        pCrawl = pCrawl->children[index];
+public:
+    AhoCorasick() : size(1), last(0) {
+        nodes.resize(2 * MAX_N);
+        nodes[0].len = 0;
+        nodes[0].link = -1;
     }
-    pCrawl->isEndOfWord = true;
-}
 
-bool search(struct TrieNode *root, string key) {
-    struct TrieNode *pCrawl = root;
-    for (int i = 0; i < key.length(); i++) {
-        int index = key[i] - 'a';
-        if (!pCrawl->children[index])
-            return false;
-        pCrawl = pCrawl->children[index];
+    void extend(char c) {
+        int cur = size++;
+        nodes[cur].len = nodes[last].len + 1;
+        int p = last;
+        
+        while (p != -1 && !nodes[p].next.count(c)) {
+            nodes[p].next[c] = cur;
+            p = nodes[p].link;
+        }
+
+        if (p == -1) {
+            nodes[cur].link = 0;
+        } else {
+            int q = nodes[p].next[c];
+            if (nodes[p].len + 1 == nodes[q].len) {
+                nodes[cur].link = q;
+            } else {
+                int clone = size++;
+                nodes[clone].len = nodes[p].len + 1;
+                nodes[clone].next = nodes[q].next;
+                nodes[clone].link = nodes[q].link;
+
+                while (p != -1 && nodes[p].next[c] == q) {
+                    nodes[p].next[c] = clone;
+                    p = nodes[p].link;
+                }
+
+                nodes[q].link = nodes[cur].link = clone;
+            }
+        }
+
+        last = cur;
     }
-    return (pCrawl != NULL && pCrawl->isEndOfWord);
+
+    bool query(const string& pattern) {
+        int u = 0;
+        for (char c : pattern) {
+            if (!nodes[u].next.count(c)) {
+                return false;
+            } else {
+                u = nodes[u].next[c];
+            }
+        }
+        return true;
+    }
+};
+
+void solve() {
+    string s;
+    int k;
+
+    cin >> s >> k;
+
+    AhoCorasick aho;
+    for (char c : s) {
+        aho.extend(c);
+    }
+
+    for (int i = 0; i < k; ++i) {
+        string pattern;
+        cin >> pattern;
+        cout << (aho.query(pattern) ? "YES" : "NO") << '\n';
+    }
 }
 
 int main() {
-    string txt;
-    cin >> txt;
-    int k;
-    cin >> k;
-    struct TrieNode *root = getNode();
-    for (int i = 0; i < txt.length(); i++) {
-        for (int j = 1; j <= txt.length() - i; j++) {
-            insert(root, txt.substr(i, j));
-        }
+    fastio
+
+    int tc = 1; // Number of test cases
+    // cin >> tc;
+
+    while (tc--) {
+        solve();
     }
-    for(int i=0; i<k; i++) {
-        string pat;
-        cin >> pat;
-        if(search(root, pat)) {
-            cout << "YES" << endl;
-        } else {
-            cout << "NO" << endl;
-        }
-    }
+
     return 0;
 }
