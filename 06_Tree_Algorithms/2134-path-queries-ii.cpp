@@ -21,6 +21,10 @@ const int INF = INT_MAX;
 const int MOD = 1e9 + 7;
 
 class SegmentTree {
+private:
+    int n;
+    vi tree;
+
 public:
     SegmentTree(int _n) : n(_n), tree(2 * _n) {}
 
@@ -45,13 +49,37 @@ public:
         for (tree[index += n] = value; index > 1; index >>= 1)
             tree[index >> 1] = max(tree[index], tree[index ^ 1]);
     }
-
-private:
-    int n;
-    vi tree;
 };
 
 class HeavyLightDecomposition {
+private:
+    int n, ti;
+    vector<vi> adj;
+    vi parent, tin, head, depth, sub_size;
+    SegmentTree st;
+
+    void dfs(int u) {
+        sub_size[u] = 1;
+        for (int& v : adj[u]) {
+            auto it = find(all(adj[v]), u);
+            adj[v].erase(it);
+            parent[v] = u;
+            depth[v] = depth[u] + 1;
+            dfs(v);
+            sub_size[u] += sub_size[v];
+            if (sub_size[v] > sub_size[adj[u][0]])
+                swap(v, adj[u][0]);
+        }
+    }
+
+    void decompose(int u) {
+        tin[u] = ti++;
+        for (int v : adj[u]) {
+            head[v] = (v == adj[u][0] ? head[u] : v);
+            decompose(v);
+        }
+    }
+
 public:
     HeavyLightDecomposition(int _n) : n(_n), ti(0), adj(_n), parent(_n), tin(_n), head(_n), depth(_n), sub_size(_n), st(_n) {}
 
@@ -63,17 +91,12 @@ public:
     void initialize(int root = 0) {
         parent[root] = depth[root] = ti = 0;
         head[root] = root;
-        calculateSubtreeSize(root);
-        decomposeHeavyLight(root);
+        dfs(root);
+        decompose(root);
     }
 
-    int lowestCommonAncestor(int u, int v) {
-        while (head[u] != head[v]) {
-            if (depth[head[u]] > depth[head[v]])
-                swap(u, v);
-            v = parent[head[v]];
-        }
-        return depth[u] < depth[v] ? u : v;
+    void updateNode(int u, int value) {
+        st.update(tin[u], value);
     }
 
     template <class Operation>
@@ -89,42 +112,10 @@ public:
         op(tin[u], tin[v]);
     }
 
-    void updateNode(int u, int value) {
-        st.update(tin[u], value);
-    }
-
     int queryPath(int u, int v) {
         int result = INT_MIN;
         processPath(u, v, [this, &result](int left, int right) { result = max(result, st.query(left, right + 1)); });
         return result;
-    }
-
-private:
-    int n, ti;
-    vector<vi> adj;
-    vi parent, tin, head, depth, sub_size;
-    SegmentTree st;
-
-    void calculateSubtreeSize(int u) {
-        sub_size[u] = 1;
-        for (int& v : adj[u]) {
-            auto it = find(all(adj[v]), u);
-            adj[v].erase(it);
-            parent[v] = u;
-            depth[v] = depth[u] + 1;
-            calculateSubtreeSize(v);
-            sub_size[u] += sub_size[v];
-            if (sub_size[v] > sub_size[adj[u][0]])
-                swap(v, adj[u][0]);
-        }
-    }
-
-    void decomposeHeavyLight(int u) {
-        tin[u] = ti++;
-        for (int v : adj[u]) {
-            head[v] = (v == adj[u][0] ? head[u] : v);
-            decomposeHeavyLight(v);
-        }
     }
 };
 
